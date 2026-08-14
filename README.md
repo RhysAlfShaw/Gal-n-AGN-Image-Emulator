@@ -10,7 +10,7 @@ Built Using Diffusers Conditional 2d Unet (https://huggingface.co/docs/diffusers
 
 # Training
 
-This model is built to train on synthetic forward modelled galxay cutouts made with MOCS.
+This model is built to train on synthetic forward modelled galxay cutouts made with [MOCS](https://github.com/RhysAlfShaw/MOCS).
 
 # Inference
 
