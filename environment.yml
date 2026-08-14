@@ -1,0 +1,22 @@
+name: euclid_emulator
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - pip
+  - pip:
+    # assuming you are using a CUDA 12 GPU, otherwise change the URL to the appropriate version
+    - --extra-index-url https://download.pytorch.org/whl/cu126
+    - torch==2.12.1
+    - torchvision==0.27.1
+    - h5py
+    - numpy
+    - matplotlib
+    - diffusers
+    - torchmetrics
+    - joblib
+    - scikit-learn
+    - accelerate
