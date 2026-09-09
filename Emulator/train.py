@@ -48,14 +48,13 @@ def train_conditional_diffusion(
 
     try:
         for epoch in range(start_epoch, num_epochs):
-            # Training Phase ---
             model.train()
             epoch_loss = 0.0
 
             for images, params in train_loader:
                 images = images.to(device, dtype=torch.float32)
                 params = params.to(device, dtype=torch.float32)
-                # --- safety check --- incase of NaN/Inf in the batch (unlikely but possible due to data issues)
+                #  incase of NaN/Inf in the batch. can probaly remove...
                 if torch.isnan(images).any() or torch.isinf(images).any():
                     print("WARNING: NaN/Inf found in images batch! Skipping...")
                     continue
@@ -68,7 +67,7 @@ def train_conditional_diffusion(
                 noise = torch.randn_like(images)
                 bsz = images.shape[0]
 
-                # Sample random timesteps
+                # sample random timesteps
                 timesteps = torch.randint(
                     0, noise_scheduler.config.num_train_timesteps, (bsz,), device=device
                 ).long()
@@ -97,23 +96,23 @@ def train_conditional_diffusion(
                         print(
                             "WARNING: NaN/Inf detected in loss! Skipping backprop for this batch..."
                         )
-                        optimizer.zero_grad()  # Clear any bad gradients just in case
+                        optimizer.zero_grad()  # clear any bad gradients just in case
                         continue
 
                 # scale loss and backprop
                 scaler.scale(loss).backward()
 
-                # Unscale the gradients of the optimizer's assigned parameters in-place
+                # unscale the gradients of the optimizer's assigned parameters in-place
                 scaler.unscale_(optimizer)
 
-                # Clip the gradients to prevent explosion (1.0 is a standard safe value)
+                # clip the gradients to prevent explosion (1.0 is a standard safe value), probably not needed anymore....
                 torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
 
-                # Step and update
+                # step and update
                 scaler.step(optimizer)
                 scaler.update()
 
-                # Step scheduler per batch, not per epoch
+                # step scheduler per batch, not per epoch
                 scheduler.step()
 
                 epoch_loss += loss.item()
@@ -121,7 +120,6 @@ def train_conditional_diffusion(
             avg_train_loss = epoch_loss / len(train_loader)
             train_loss_history.append(avg_train_loss)
 
-            # --- validation ---
             model.eval()
             val_loss = 0.0
             with torch.no_grad():
@@ -170,7 +168,6 @@ def train_conditional_diffusion(
                 f"Epoch {epoch+1:03d} | Train Loss: {avg_train_loss:.5f} | Val Loss: {avg_val_loss:.5f} | LR: {scheduler.get_last_lr()[0]:.6f}"
             )
 
-            # --- Checkpointing ---
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
                 model.save_pretrained(os.path.join(save_dir, "best_model"))
@@ -185,7 +182,6 @@ def train_conditional_diffusion(
                 )
                 print(f" -> Saved new best model with Val Loss: {best_val_loss:.5f}")
 
-            # --- Periodic Vis ---
             if (epoch + 1) % 10 == 0:
                 plot_loss(train_loss_history, val_loss_history, save_dir)
 
@@ -205,7 +201,7 @@ def train_conditional_diffusion(
                     image_shape=real_images_grid.shape[1:],
                 )
 
-                # denormalize from [-1, 1] to [0, 1]
+                # denormalize from [-1, 1] to [0, 1] for easier visualization.
                 fake_images = (fake_images + 1.0) / 2.0
                 real_images_grid = (real_images_grid + 1.0) / 2.0
 
@@ -273,7 +269,7 @@ def train_conditional_diffusion(
         print("Saving final visualizations and plots...")
         plot_loss(train_loss_history, val_loss_history, save_dir)
 
-        # Load best weights for evaluation
+        # load best weights for evaluation
         best_model_path = os.path.join(save_dir, "best_model")
         if os.path.exists(best_model_path):
             model = UNet2DConditionModel.from_pretrained(best_model_path).to(device)

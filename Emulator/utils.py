@@ -93,11 +93,9 @@ def plot_pretraining_distributions(dataset, save_dir="outputs"):
 
     scaled_params = dataset.params
 
-    # Check if the scaler is a scikit-learn transformer or the old dictionary
     if hasattr(dataset.scaler_stats, "inverse_transform"):
         unscaled_params = dataset.scaler_stats.inverse_transform(scaled_params)
     else:
-        # Fallback for old dictionary logic
         mean = dataset.scaler_stats["mean"]
         std = dataset.scaler_stats["std"]
         unscaled_params = (scaled_params * std) + mean
@@ -113,7 +111,7 @@ def plot_pretraining_distributions(dataset, save_dir="outputs"):
     plt.savefig(os.path.join(save_dir, "feature_distributions.png"))
     plt.close()
 
-    # Randomly sample up to 1000 images, that should be enough to get a good idea of the pixel distribution without overflowing RAM
+    # Randomly sample up to 1000 images, that should be enough to get a good idea of the pixel distribution
     sample_size = min(len(dataset), 1000)
     indices = np.random.choice(len(dataset), sample_size, replace=False)
 
@@ -126,7 +124,6 @@ def plot_pretraining_distributions(dataset, save_dir="outputs"):
     pixel_values = np.concatenate(pixel_values)
 
     plt.figure(figsize=(8, 5))
-    # Log scale is required for astronomy images to see structure beyond background noise
     plt.hist(pixel_values, bins=100, color="coral", alpha=0.7, log=True)
     plt.title(f"Normalized Pixel Distribution (N={sample_size} cutouts)")
     plt.xlabel("Pixel Intensity [-1.0 to 1.0]")
