@@ -218,7 +218,7 @@ def plot_galaxies_grid(
 
 
 if __name__ == "__main__":
-    # Fixed stellar mass, agn fraction, and sfr; varying redshift
+    # fixed stellar mass, agn fraction, and sfr; varying redshift
     mock_experiments_redshifts = pl.DataFrame(
         {
             "stellar_mass": [1e10, 1e10, 1e10, 1e10],
@@ -228,7 +228,7 @@ if __name__ == "__main__":
         }
     )
 
-    # Fixed redshift, agn fraction, and sfr; varying stellar mass
+    # fixed redshift, agn fraction, and sfr; varying stellar mass
     mock_experiments_stellar_mass = pl.DataFrame(
         {
             "stellar_mass": [5e9, 1e10, 1e11, 1e12],
@@ -238,7 +238,7 @@ if __name__ == "__main__":
         }
     )
 
-    # Fixed stellar mass, redshift, and sfr; varying agn fraction
+    # fixed stellar mass, redshift, and sfr; varying agn fraction
     mock_experiments_agn_fraction = pl.DataFrame(
         {
             "stellar_mass": [1e10, 1e10, 1e10, 1e10],
@@ -248,7 +248,7 @@ if __name__ == "__main__":
         }
     )
 
-    # Fixed stellar mass, redshift, and agn fraction; varying sfr
+    # fixed stellar mass, redshift, and agn fraction; varying sfr
     mock_experiments_sfr = pl.DataFrame(
         {
             "stellar_mass": [1e10, 1e10, 1e10, 1e10],

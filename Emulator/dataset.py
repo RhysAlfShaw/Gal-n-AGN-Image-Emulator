@@ -1,5 +1,4 @@
 import os
-
 import glob
 import h5py
 import numpy as np
@@ -36,7 +35,7 @@ def parse_hdf5_directory(data_dir):
             for k in f.keys():
                 meta = dict(f[k].attrs)
 
-                # Filter out invalid or NaN data, shouldnt be any but just in case.
+                # filter out invalid or NaN data, shouldnt be any but just in case.
                 if (
                     meta.get("stellar_mass", "NaN") == "NaN"
                     or meta.get("redshift", "NaN") == "NaN"
@@ -45,7 +44,7 @@ def parse_hdf5_directory(data_dir):
                 ):
                     continue
 
-                # Parse strings to floats safely
+                # parse strings to floats safely
                 mass_str = str(meta["stellar_mass"]).replace(" Msun", "").strip()
                 mass = float(mass_str)
 

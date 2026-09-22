@@ -323,7 +323,7 @@ if __name__ == "__main__":
 
     param_dim = 4
 
-    # Model can take a while to train, so this allows for exceding the maximum runtime of a single job on HPC clusters by allowing for checkpointing and resuming training.
+    # model can take a while to train, so this allows for exceding the maximum runtime of a single job on HPC clusters by allowing for checkpointing and resuming training.
     checkpoint_dir = os.path.join(SAVE_DIR, "best_model")
     opt_sch_path = os.path.join(checkpoint_dir, "optimizer_scheduler.pt")
 

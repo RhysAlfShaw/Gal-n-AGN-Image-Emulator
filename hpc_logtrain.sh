@@ -3,7 +3,7 @@
 #SBATCH --output=dr1-emulator/Diffusion-train-%j.out
 #SBATCH --gpus=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=50Gb # not sure how much is acctually needed.
+#SBATCH --mem=50Gb 
 #SBATCH --time=24:00:00         # Hours:Mins:Secs
 
 
